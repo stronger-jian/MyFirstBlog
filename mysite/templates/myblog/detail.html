@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block main %}
+    <article class="post post-{{ article.pk }}">
+        <header class="entry-header">
+            <h1 class="entry-title">{{ article.title }}</h1>
+            <div class="entry-meta">
+                <span class="post-category"><a href="#">{{ article.category }}</a></span>
+                <span class="post-date"><a href="#"><time class="entry-date"
+                                                          datetime="{{ article.created_time }}">{{ article.created_time }}</time></a></span>
+                <span class="post-author"><a href="#">Jian</a></span>
+                <span class="comments-link"><a href="#">{{ article.comment_set.count }} 评论</a></span>
+                <span class="views-count"><a href="#">588 阅读</a></span>
+            </div>
+        </header>
+        <div class="entry-content clearfix">
+            {{ article.body|safe }}
+        </div>
+    </article>
+                    <section class="comment-area" id="comment-area">
+                    <hr>
+                    <h3>发表评论</h3>
+                    <form action="{% url 'comment:aritcle_comment' article.pk %}" method="post" class="comment-form">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="id_name">名字：</label>
+                                {{ form.name }}
+                                {{ form.name.errors }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_email">邮箱：</label>
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_url">网址：</label>
+                                {{ form.website }}
+                                {{ form.website.errors }}
+                            </div>
+                            <div class="col-md-12">
+                                <label for="id_comment">评论：</label>
+                                {{ form.text }}
+                                {{ form.text.errors }}
+                                <button type="submit" class="comment-btn">发表</button>
+                            </div>
+                        </div>    <!-- row -->
+                    </form>
+                    <div class="comment-list-panel">
+                        <h3>评论列表，共 <span>{{ comment_list.count }}</span> 条评论</h3>
+                        <ul class="comment-list list-unstyled">
+                            {% for comment in comment_list %}
+                            <li class="comment-item">
+                                <span class="nickname">{{ comment.name }}</span>
+                                <time class="submit-date" datetime="{{ comment.created_time }}">{{ comment.created_time }}</time>
+                                <div class="text">
+                                    {{ comment.text }}
+                                </div>
+                            </li>
+                                {% empty %}
+                                暂无评论！！！
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </section>
+    <!-- 简单分页效果
+    <div class="pagination-simple">
+        <a href="#">上一页</a>
+        <span class="current">第 6 页 / 共 11 页</span>
+        <a href="#">下一页</a>
+    </div>
+    -->
+    <div class="pagination">
+        <ul>
+            <li><a href="">1</a></li>
+            <li><a href="">...</a></li>
+            <li><a href="">4</a></li>
+            <li><a href="">5</a></li>
+            <li class="current"><a href="">6</a></li>
+            <li><a href="">7</a></li>
+            <li><a href="">8</a></li>
+            <li><a href="">...</a></li>
+            <li><a href="">11</a></li>
+        </ul>
+    </div>
+    {% endblock main %}
